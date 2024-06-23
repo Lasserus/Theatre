@@ -50,7 +50,20 @@ def CreateTables(conn):
             CONSTRAINT fk_mg_movie FOREIGN KEY(movie_id) REFERENCES movie(movie_id),
             CONSTRAINT fk_mg_genre FOREIGN KEY(genre_id) REFERENCES genre(genre_id)           
         );
-     
+
+        CREATE TABLE IF NOT EXISTS city(
+            city_id INT,
+            name VARCHAR(200),
+            CONSTRAINT pk_city PRIMARY KEY (city_ID)       
+            );
+        
+        CREATE TABLE IF NOT EXISTS cinema(
+            cinema_id INT,
+            name VARCHAR(200),
+            city_id INT,
+            CONSTRAINT pk_cimena PRIMARY KEY (cinema_id),
+            CONSTRAINT fk_cinema_city FOREIGN KEY (city_id) REFERENCES city(city_id)         
+                    );
         """)
         conn.commit()
 
