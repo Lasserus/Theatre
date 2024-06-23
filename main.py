@@ -103,6 +103,16 @@ def ShowCastandGenre(conn):
         for row in rows:
             print(row)
 
+def ShowMovieScreening(conn):
+    with conn.cursor() as curr:
+        curr.execute("""
+        SELECT time_id,  show_datetime 
+        FROM show_time
+        WHERE movie_id = 1 and cinema_id= 3
+        """)
+        rows = curr.fetchall()
+        for row in rows:
+            print(row)
 def main():
     params = config()
     connection = psycopg2.connect(**params)
@@ -113,9 +123,9 @@ def main():
         ShowMovies(connection)
         print("\n Movie cast members and genre")
         ShowCastandGenre(connection)
-       
-   
-    
+        print("\n Movie showing dates")
+        ShowMovieScreening(connection)
+     
     connection.close()
 
 
