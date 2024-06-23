@@ -64,6 +64,17 @@ def CreateTables(conn):
             CONSTRAINT pk_cimena PRIMARY KEY (cinema_id),
             CONSTRAINT fk_cinema_city FOREIGN KEY (city_id) REFERENCES city(city_id)         
                     );
+
+        CREATE TABLE IF NOT EXISTS show_time(
+            time_id INT,
+            movie_id INT,
+            cinema_id INT,
+            show_datetime TIMESTAMP,
+            CONSTRAINT pk_showtime PRIMARY KEY (time_id),
+            CONSTRAINT fk_show_movie FOREIGN KEY (movie_id) REFERENCES movie(movie_id),
+            CONSTRAINT fk_show_cinema FOREIGN KEY (cinema_id) REFERENCES cinema(cinema_id)
+                            
+                    )
         """)
         conn.commit()
 
