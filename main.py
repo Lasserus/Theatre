@@ -54,7 +54,30 @@ def CreateTables(conn):
         """)
         conn.commit()
 
-       
+def ShowMovies(conn):
+    with conn.cursor() as curr:
+        curr.execute("""
+        SELECT m.movie_id, d.name, d.lastname, m.title, m.runtime_min, m.release_date, m.description
+        FROM movie m
+        INNER JOIN director d ON m.director_id = d.director_id
+        """)
+        rows = curr.fetchall()
+        for row in rows:
+            print(row)
+
+def ShowCastandGenre(conn):
+     with conn.cursor() as curr:
+        curr.execute("""
+        SELECT m.movie_id, m.title, c.name, c.lastname, g.name
+        FROM movie m
+        INNER JOIN movie_cast mc ON mc.movie_Id = m.movie_id
+        INNER JOIN cast_member c ON mc.cast_id = c.cast_id
+        INNER JOIN movie_genre mg ON m.movie_id = mg.movie_id
+        INNER JOIN genre g ON mg.genre_id = g.genre_id
+        """)
+        rows = curr.fetchall()
+        for row in rows:
+            print(row)
 
 def main():
     params = config()
@@ -62,7 +85,11 @@ def main():
     
     if connection:
         CreateTables(connection)
-   
+        print("\n Movies:")
+        ShowMovies(connection)
+        print("\n Movie cast members and genre")
+        ShowCastandGenre(connection)
+       
    
     
     connection.close()
