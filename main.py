@@ -74,7 +74,7 @@ def CreateTables(conn):
             CONSTRAINT fk_show_movie FOREIGN KEY (movie_id) REFERENCES movie(movie_id),
             CONSTRAINT fk_show_cinema FOREIGN KEY (cinema_id) REFERENCES cinema(cinema_id)
                             
-                    )
+                    );
         """)
         conn.commit()
 
