@@ -75,6 +75,60 @@ def CreateTables(conn):
             CONSTRAINT fk_show_cinema FOREIGN KEY (cinema_id) REFERENCES cinema(cinema_id)
                             
                     );
+
+       CREATE TABLE IF NOT EXISTS seat_type (
+            type_id INT,
+            name VARCHAR(200),
+            CONSTRAINT pk_seattype PRIMARY KEY (type_id)
+        );
+
+        CREATE TABLE IF NOT EXISTS theatre (
+            theatre_id INT,
+            cinema_id INT,
+            theatre_num VARCHAR(10),
+            CONSTRAINT pk_theatre PRIMARY KEY (theatre_id),
+            CONSTRAINT fk_theatre_cinema FOREIGN KEY (cinema_id) REFERENCES cinema(cinema_id)
+        );
+
+        --ALTER TABLE show_time
+       --ADD COLUMN theatre_id INT;
+
+       -- ALTER TABLE show_time
+        --ADD CONSTRAINT fk_showtime_tht
+        --FOREIGN KEY (theatre_id)
+       -- REFERENCES theatre(theatre_id);
+
+        --ALTER TABLE show_time
+        --DROP CONSTRAINT fk_show_cinema;
+
+        --ALTER TABLE show_time
+        --DROP COLUMN cinema_id;
+
+        CREATE TABLE IF NOT EXISTS seat (
+            seat_id INT,
+            seat_type_id INT,
+            theatre_id INT,
+            seat_location VARCHAR(10),
+            CONSTRAINT pk_seat PRIMARY KEY (seat_id),
+            CONSTRAINT fk_seat_type FOREIGN KEY (seat_type_id) REFERENCES seat_type(type_id),
+            CONSTRAINT fk_seat_th FOREIGN KEY (theatre_id) REFERENCES theatre(theatre_id)
+        );
+
+        CREATE TABLE IF NOT EXISTS booking (
+            booking_id INT,
+            showing_id INT,
+            CONSTRAINT pk_booking PRIMARY KEY (booking_id),
+            CONSTRAINT fk_booking_show FOREIGN KEY (showing_id) REFERENCES show_time(time_id)
+        );
+
+        CREATE TABLE IF NOT EXISTS booking_seat (
+            booking_id INT,
+            seat_id INT,
+            CONSTRAINT fk_bkst_booking FOREIGN KEY (booking_id) REFERENCES booking(booking_id),
+            CONSTRAINT fk_bkst_seat FOREIGN KEY (seat_id) REFERENCES seat(seat_id)
+        );
+
+                    
         """)
         conn.commit()
 
@@ -108,7 +162,8 @@ def ShowMovieScreening(conn):
         curr.execute("""
         SELECT time_id,  show_datetime 
         FROM show_time
-        WHERE movie_id = 1 and cinema_id= 3
+        WHERE movie_id = 1 
+       
         """)
         rows = curr.fetchall()
         for row in rows:
